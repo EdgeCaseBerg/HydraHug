@@ -37,10 +37,39 @@ switch ($_SERVER['REQUEST_METHOD']) {
         <p>
         Use the list a friend has exported to follow each friend!
         </p>
+        <noscript>You need to turn on Javascript for this whole thing to work</noscript>
         <form method="POST">
-            <input name="user_id">
-            <input type="submit" value="Submit"/>
-        </form><?php
+            <textarea name="user_id"></textarea>
+        </form>
+        <input id="submit" type="submit" value="Submit"/>
+        <div id="followed"></div>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+        <script type="text/javascript">
+            var textArea = document.getElementsByTagName('textarea')[0]
+            
+
+            function processlist(){
+                var user_ids = textarea.value.split(',') //we're not really going crazy here with validaton.
+                var handlePost = function(error, text) { 
+                    d3.select("#followed").append(text)
+                    textArea.value = user_ids.join(',')
+
+                    if(user_ids.length > 0){
+                        initiateFollowing()//process next id
+                    }
+                }
+
+                function initiateFollowing(){
+                    var id = user_ids.pop()
+                    d3.text("/follow.php")
+                        .header("Content-type", "application/x-www-form-urlencoded")
+                        .post("user_id=" + id, handlePost);
+                }
+                initiateFollowing()
+            }
+            document.getElementById('submit').onclick=processlist
+        </script>
+        <?php
         break;
 }
 ?>

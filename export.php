@@ -1,10 +1,5 @@
 <?php
-$conf = json_decode(file_get_contents('../conf.json'));
-define ('CONSUMER_KEY', $conf->apiKey);
-define ('CONSUMER_SECRET', $conf->apiSecretKey);
-define ('OAUTH_TOKEN', $conf->accessToken);
-define ('OAUTH_TOKEN_SECRET', $conf->accessSecret);
-
+include './twitteroauth/config.php';
 include ('./twitteroauth/twitteroauth/twitteroauth.php');
 
 $twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET);

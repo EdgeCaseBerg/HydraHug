@@ -1,4 +1,5 @@
 <?php
+session_start();
 include './twitteroauth/config.php';
 include ('./twitteroauth/twitteroauth/twitteroauth.php');
 

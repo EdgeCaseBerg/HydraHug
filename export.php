@@ -3,7 +3,7 @@ include './twitteroauth/config.php';
 include ('./twitteroauth/twitteroauth/twitteroauth.php');
 
 if (empty($_SESSION['access_token']) || empty($_SESSION['access_token']['oauth_token']) || empty($_SESSION['access_token']['oauth_token_secret'])) {
-    header('Location: ./clearsessions.php');
+    header('Location: ./twitteroauth/clearsessions.php');
 }
 
 $twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);

@@ -39,12 +39,8 @@ while ($cursor != 0) {
 $strIds = implode(',', $followerIds);
 ?>
 <h1>Your follower Ids:</h1>
+<p>
+	Simply copy and paste this list into a txt file. Then you'll be able
+	to share your followers with your friends!
+</p>
 <code><?php echo $strIds  ?></code>
-<h4>Or nicely listed if you don't just want a copy paste version:</h4>
-<ul>
-	<?php 
-	foreach ($followerIds as $id) {
-		echo '<li>' . $id . '</li>';
-	}
-	?>
-</ul>

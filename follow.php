@@ -39,6 +39,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         </p>
         <form>
             <input name="user_id">
+            <input type="submit" value="Submit"/>
         </form><?php
         break;
 }

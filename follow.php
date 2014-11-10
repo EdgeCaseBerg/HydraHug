@@ -24,7 +24,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             'follow' => true
         );
 
-        $followed = $twitter->get('friendships/create', $params);
+        $followed = $twitter->post('friendships/create', $params);
         if (!is_object($followed) || isset($followed->errors)) {
             echo json_encode($followed);
             exit();
@@ -37,7 +37,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         <p>
         Use the list a friend has exported to follow each friend!
         </p>
-        <form>
+        <form method="POST">
             <input name="user_id">
             <input type="submit" value="Submit"/>
         </form><?php

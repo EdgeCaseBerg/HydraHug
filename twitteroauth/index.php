@@ -23,4 +23,3 @@ $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oau
 include '../export.php';
 
 include '../follow.php';
-//$connection->post('friendships/create', array('id' => 9436992));

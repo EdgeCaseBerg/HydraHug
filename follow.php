@@ -49,7 +49,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             
 
             function processlist(){
-                var user_ids = textarea.value.split(',') //we're not really going crazy here with validaton.
+                var user_ids = textArea.value.split(',') //we're not really going crazy here with validaton.
                 var handlePost = function(error, text) { 
                     d3.select("#followed").append(text)
                     textArea.value = user_ids.join(',')

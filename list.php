@@ -1,3 +1,7 @@
+<?php
+session_start();
+$link = "http://" . $_SERVER['SERVER_NAME'] . "/follow?twitter_id=" . $_SESSION['twitter_id'];
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,35 +16,17 @@
 	<section>
 		<nav>
 			<a href="https://github.com/EJEHardenberg/HydraHug">Source Code</a>
-			<a href="/makelist.php">Make your list</a>
 		</nav>
 	</section>
 	<section>
 		<p>
-			Hydra Hug is a simple twitter application that enables one to share
-			friends lists. Let's say that you've been on twitter for a while and
-			you invite a friend on.
+			Your friends are now ready to be shared! Give the link below to your friends!
 		</p>
-		<p>
-			The friend, being a twitter newbie, doesn't know who to follow but
-			they know that they like all your friends and have similar interests.
-			So you take the following steps.
-		</p>
-		<ol>
-			<li>
-				Click the <a href="/makelist.php">Make your list</a> link and authorize twitter
-			</li>
-			<li>
-				Grab the link to your list and share it with your friend
-			</li>
-			<li>
-				Your friend visits the link, authorizes twitter, and then the app
-				will start connecting them to your list.
-			</li>
-			<li>
-				You both enjoy twitter together!
-			</li>
-		</ol>
+		<div>
+			<pre>
+				<?php echo $link; ?>
+			</pre>
+		</div>
 	</section>
 	<footer>
 		<h3>Privacy and Data Policy</h3>

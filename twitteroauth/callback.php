@@ -62,48 +62,69 @@ unset($_SESSION['oauth_token_secret']);
 if (200 == $connection->http_code) {
   /* The user has been verified and the access tokens can be saved for future use */
   	$_SESSION['status'] = 'verified';
-  	if(isset($_SESSION['state']) && $_SESSION['state'] == 'makelist'){
-  		$twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
-		if (!is_object($twitter)) {
-		    error_log('Error creating TwitterOAuth object');
-	    	exit (-1);
-		}
-		$twitter->host = 'https://api.twitter.com/1.1/';
+  	if(isset($_SESSION['state'])){
+  		switch ($_SESSION['state']) {
+  			case 'makelist':
+		  		$twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
+				if (!is_object($twitter)) {
+				    error_log('Error creating TwitterOAuth object');
+			    	exit (-1);
+				}
+				$twitter->host = 'https://api.twitter.com/1.1/';
 
-		$cursor = -1; // first page
-		$follower_total = 0;
-		$followerIds = array();
-		while ($cursor != 0) {
-			$params = array(
-		        'stringify_ids' => true,
-		        'count' => 100,
-		        'cursor' => $cursor,
-		    );
+				$cursor = -1; // first page
+				$follower_total = 0;
+				$followerIds = array();
+				while ($cursor != 0) {
+					$params = array(
+				        'stringify_ids' => true,
+				        'count' => 100,
+				        'cursor' => $cursor,
+				    );
 
-		    $followers = $twitter->get('followers/ids', $params);
-		    if (!is_object($followers) || isset($followers->errors)) {
-		        error_log ("Error retrieving followers");
-		        print_r($followers);
-		        exit (-1);
-		    }
+				    $followers = $twitter->get('followers/ids', $params);
+				    if (!is_object($followers) || isset($followers->errors)) {
+				        error_log ("Error retrieving followers");
+				        print_r($followers);
+				        exit (-1);
+				    }
 
-		    $sql = "INSERT INTO lists (owner_id,to_follow) VALUES ";
-		    foreach ($followers->id as $id) {
-		    	$sql .= '(' . $account->id ',' . $id . ')';
-		    }
+				    $sql = "INSERT INTO lists (owner_id,to_follow) VALUES ";
+				    foreach ($followers->id as $id) {
+				    	$sql .= '(' . $account->id ',' . $id . ')';
+				    }
 
-		    if(count($followers->id) != 0){
-		    	mysql_query($sql);
-		    }
-		}
-		$_SESSION['twitter_id'] = $account->id;
-		unset($_SESSION['state']);
-  		header('Location: /list.php');
+				    if(count($followers->id) != 0){
+				    	mysql_query($sql);
+				    }
+				}
+				$_SESSION['twitter_id'] = $account->id;
+				unset($_SESSION['state']);
+		  		header('Location: /list.php');
+		  		break;
+		  	case 'follow':
+		  		/* We have been asked to follow someone, create a job */
+		  		if(!isset($_SESSION['owner_id'])){
+		  			die('Session Issue');
+		  		}
+		  		$jobid = uniqid($_SESSION['owner_id']);
+		  		$sqlValues = array(
+		  			'"'.$jobid.'"'.,
+		  			$account->id,
+		  			$_SESSION['owner_id'],
+		  			"\"Job waiting to run\"",
+		  			"\"CREATED\""
+		  		);
+		  		$sql = "INSERT INTO jobs (owner_id, follower_id, job_id, message, status) VALUES (" .implode(',',$sqlValues). ")";
+		  		mysql_query($sql);
+		  		header('Location: /jobs?job_id=' . $jobid);
+		  		break;
+		  	default:
+  				header('Location: /');		
+  				break;
 	}else{
-
+		header('Location: /');		
 	}
-
-  	
 } else {
   /* Save HTTP status for error dialog on connnect page.*/
   header('Location: ./clearsessions.php');

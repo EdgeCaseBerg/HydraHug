@@ -25,7 +25,9 @@ CREATE TABLE lists (
 CREATE TABLE jobs (
 	id int(12) NOT NULL auto_increment PRIMARY KEY,
 	owner_id INT(12) NOT NULL,
+	follower_id INT(12) NOT NULL,
+	job_id VARCHAR(512) NOT NULL,
 	message VARCHAR(512),
-	status VARCHAR(32) DEFAULT "ready",
+	status VARCHAR(32) DEFAULT "CREATED",
 	INDEX(`owner_id`)
 ) ENGINE InnoDB;

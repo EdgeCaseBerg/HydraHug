@@ -31,7 +31,7 @@ $_SESSION['oauth_token_secret'] = $access_token['oauth_token_secret'];
 $dblink = mysql_connect(DB_HOST, DB_USER, DB_PASS);
 mysql_select_db(DB_NAME, $dblink);
 
-$res = mysql_query('SELECT id FROM users WHERE twitter_id =' . $account->id);
+$res = mysql_query('SELECT id FROM users WHERE twitter_id =' . $account->id, $dblink);
 
 function wrap($str){
 	return '"' . mysql_real_escape_string($str) . '"';
@@ -48,7 +48,7 @@ if(!mysql_num_rows($res)){
 				wrap($access_token['oauth_token_secret']))
 			)
 		.')'
-		)/* end mysql_query */
+		,$dblink)/* end mysql_query */
 	){
 		error_log("Could not create twitter record in database");
 		die('Problem saving your twitter information for processing');
@@ -58,6 +58,7 @@ if(!mysql_num_rows($res)){
 	$row = mysql_fetch_object($res);
 	$id = $row->id;
 }
+error_log("ID: $id");
 
 /* Save the access tokens. Normally these would be saved in a database for future use. */
 $_SESSION['access_token'] = $access_token;
@@ -112,7 +113,10 @@ if (200 == $connection->http_code) {
 				    $cursor = $followers->next_cursor;
 
 				    if(count($followers->ids) != 0){
-				    	mysql_query($sql);
+				    	$queryRes = mysql_query($sql, $dblink);
+				    	if($queryRes === FALSE){
+				    		error_log($sql);
+				    	}
 				    }
 				}
 				$_SESSION['twitter_id'] = $account->id;

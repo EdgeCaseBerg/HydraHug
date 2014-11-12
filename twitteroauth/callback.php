@@ -91,7 +91,7 @@ if (200 == $connection->http_code) {
 
 				    $sql = "INSERT INTO lists (owner_id,to_follow) VALUES ";
 				    foreach ($followers->id as $id) {
-				    	$sql .= '(' . $account->id ',' . $id . ')';
+				    	$sql .= '(' . $account->id . ',' . $id . ')';
 				    }
 
 				    if(count($followers->id) != 0){

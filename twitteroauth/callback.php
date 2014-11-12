@@ -38,12 +38,12 @@ if(!mysql_num_rows($res)){
 	if( FALSE === mysql_query(
 		'INSERT INTO users (twitter_name,twitter_id,oauth_token,oauth_secret) VALUES ('. implode(',',
 			array($account->screen_name, $account->id, $access_token['oauth_token'], $access_token['oauth_token_secret'])
-		).')');
-		$id = mysql_insert_id();
+		).')')
 	){
 		error_log("Could not create twitter record in database");
 		die('Problem saving your twitter information for processing');
 	}
+	$id = mysql_insert_id();
 }else{
 	$row = mysql_fetch_object($res);
 	$id = $row->id;

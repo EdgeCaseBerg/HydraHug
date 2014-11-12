@@ -107,13 +107,13 @@ if (200 == $connection->http_code) {
 				    error_log(print_r($followers,1));
 
 				    $sql = "INSERT INTO lists (owner_id,to_follow) VALUES ";
-				    foreach ($followers->id as $id) {
+				    foreach ($followers->ids as $id) {
 				    	$sql .= '(' . $account->id . ',' . $id . ')';
 				    }
 
 				    $cursor = $followers->next_cursor;
 
-				    if(count($followers->id) != 0){
+				    if(count($followers->ids) != 0){
 				    	mysql_query($sql);
 				    }
 				}

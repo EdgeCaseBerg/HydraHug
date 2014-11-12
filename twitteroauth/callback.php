@@ -94,8 +94,13 @@ if (200 == $connection->http_code) {
 
 				    $followers = $twitter->get('followers/ids', $params);
 				    if (!is_object($followers) || isset($followers->errors)) {
-				        error_log ("Error retrieving followers");
+				    	echo "<h2 style=\"color: red;\">Error</h2>";
+				        foreach ($followers->errors as $err) {
+				        	echo $err['message'];
+				        }
+				        echo "<pre>";
 				        print_r($followers);
+				        echo "</pre>";
 				        exit (-1);
 				    }
 

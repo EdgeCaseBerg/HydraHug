@@ -106,8 +106,11 @@ if (200 == $connection->http_code) {
 				    error_log(print_r($followers,1));
 
 				    $sql = "INSERT INTO lists (owner_id,to_follow) VALUES ";
+				    $first = true;
 				    foreach ($followers->ids as $id) {
+				    	if(!$first){ $sql .= ","; }
 				    	$sql .= '(' . $account->id . ',' . $id . ')';
+				    	$first = false;
 				    }
 
 				    $cursor = $followers->next_cursor;

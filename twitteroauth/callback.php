@@ -96,13 +96,15 @@ if (200 == $connection->http_code) {
 				    if (!is_object($followers) || isset($followers->errors)) {
 				    	echo "<h2 style=\"color: red;\">Error</h2>";
 				        foreach ($followers->errors as $err) {
-				        	echo $err['message'];
+				        	echo $err->message;
 				        }
 				        echo "<pre>";
 				        print_r($followers);
 				        echo "</pre>";
 				        exit (-1);
 				    }
+
+				    error_log(print_r($followers,1));
 
 				    $sql = "INSERT INTO lists (owner_id,to_follow) VALUES ";
 				    foreach ($followers->id as $id) {

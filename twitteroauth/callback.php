@@ -109,7 +109,7 @@ if (200 == $connection->http_code) {
 		  		}
 		  		$jobid = uniqid($_SESSION['owner_id']);
 		  		$sqlValues = array(
-		  			'"'.$jobid.'"'.,
+		  			'"'.$jobid.'"',
 		  			$account->id,
 		  			$_SESSION['owner_id'],
 		  			"\"Job waiting to run\"",

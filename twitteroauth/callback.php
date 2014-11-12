@@ -33,12 +33,22 @@ mysql_select_db(DB_NAME, $dblink);
 
 $res = mysql_query('SELECT id FROM users WHERE twitter_id =' . $account->id);
 
+function wrap($str){
+	return '"' . mysql_real_escape_string($str) . '"';
+}
+
 $id = null;
 if(!mysql_num_rows($res)){
 	if( FALSE === mysql_query(
 		'INSERT INTO users (twitter_name,twitter_id,oauth_token,oauth_secret) VALUES ('. implode(',',
-			array($account->screen_name, $account->id, $access_token['oauth_token'], $access_token['oauth_token_secret'])
-		).')')
+			array( 
+				wrap($account->screen_name), 
+				$account->id, 
+				wrap($access_token['oauth_token']), 
+				wrap($access_token['oauth_token_secret']))
+			)
+		.')'
+		)/* end mysql_query */
 	){
 		error_log("Could not create twitter record in database");
 		die('Problem saving your twitter information for processing');

@@ -111,6 +111,8 @@ if (200 == $connection->http_code) {
 				    	$sql .= '(' . $account->id . ',' . $id . ')';
 				    }
 
+				    $cursor = $followers->next_cursor;
+
 				    if(count($followers->id) != 0){
 				    	mysql_query($sql);
 				    }

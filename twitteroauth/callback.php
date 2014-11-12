@@ -59,8 +59,6 @@ if(!mysql_num_rows($res)){
 	$id = $row->id;
 }
 
-mysql_close($dblink);
-
 /* Save the access tokens. Normally these would be saved in a database for future use. */
 $_SESSION['access_token'] = $access_token;
 
@@ -119,6 +117,7 @@ if (200 == $connection->http_code) {
 				}
 				$_SESSION['twitter_id'] = $account->id;
 				unset($_SESSION['state']);
+				mysql_close($dblink);
 		  		header('Location: /list.php');
 		  		break;
 		  	case 'follow':
@@ -136,16 +135,20 @@ if (200 == $connection->http_code) {
 		  		);
 		  		$sql = "INSERT INTO jobs (owner_id, follower_id, job_id, message, status) VALUES (" .implode(',',$sqlValues). ")";
 		  		mysql_query($sql);
+		  		mysql_close($dblink);
 		  		header('Location: /jobs?job_id=' . $jobid);
 		  		break;
 		  	default:
+		  		mysql_close($dblink);
   				header('Location: /');		
   				break;
   		}
 	}else{
+		mysql_close($dblink);
 		header('Location: /');		
 	}
 } else {
   /* Save HTTP status for error dialog on connnect page.*/
+  mysql_close($dblink);
   header('Location: ./clearsessions.php');
 }

@@ -24,8 +24,8 @@ $access_token = $connection->getAccessToken($_REQUEST['oauth_verifier']);
 $account = $connection->get('account/verify_credentials');
 
 /* Save temporary credentials to session. */
-$_SESSION['oauth_token'] = $token = $request_token['oauth_token'];
-$_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
+$_SESSION['oauth_token'] = $token = $access_token['oauth_token'];
+$_SESSION['oauth_token_secret'] = $access_token['oauth_token_secret'];
 
 
 $dblink = mysql_connect(DB_HOST, DB_USER, DB_PASS);

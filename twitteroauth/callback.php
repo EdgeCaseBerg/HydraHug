@@ -122,6 +122,7 @@ if (200 == $connection->http_code) {
 		  	default:
   				header('Location: /');		
   				break;
+  		}
 	}else{
 		header('Location: /');		
 	}

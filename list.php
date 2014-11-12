@@ -1,6 +1,6 @@
 <?php
 session_start();
-$link = "http://" . $_SERVER['SERVER_NAME'] . "/follow?twitter_id=" . $_SESSION['twitter_id'];
+$link = "http://" . $_SERVER['SERVER_NAME'] . "/follow.php?twitter_id=" . $_SESSION['twitter_id'];
 ?>
 <!DOCTYPE html>
 <html>

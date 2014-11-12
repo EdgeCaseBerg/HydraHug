@@ -1,7 +1,7 @@
 <?php
 session_start();
-include './twitteroauth/twitteroauth/config.php';
-include ('./twitteroauth/twitteroauth/twitteroauth.php');
+include dirname(__FILE__) . '/twitteroauth/twitteroauth/config.php';
+include dirname(__FILE__) . '/twitteroauth/twitteroauth/twitteroauth.php';
 
 if(!isset($_GET['twitter_id']) || !is_numeric($_GET['twitter_id'])){
     die('Invalid Twitter Id');

@@ -11,7 +11,7 @@ include dirname(__FILE__) . '/twitteroauth/config.php';
 
 $dblink = mysql_connect(DB_HOST, DB_USER, DB_PASS);
 mysql_select_db(DB_NAME, $dblink);
-
+//inb4 SQL injection
 $sql = "SELECT status,message FROM jobs WHERE job_id = \"" . mysql_real_escape_string($_GET['job_id']) . "\"";
 $res = mysql_query($sql);
 if(mysql_num_rows($res) == 0){

@@ -40,6 +40,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
     }
 
     $processed = 0;
+    $lastid = 0;
     while(($followRow = mysql_fetch_object($followRes)) != FALSE ){
 
         $twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $jobInfo->oauth_token, $jobInfo->oauth_secret);
@@ -71,8 +72,9 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
             }
         }
         $processed++;
+        $lastid = $followRow->last_id;
     }
-    mysql_query("UPDATE jobs SET status = \"FINISHED\", message = \"Done processing. Processed: $processed followers\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);    
+    mysql_query("UPDATE jobs SET status = \"FINISHED\", message = \"Done processing. Processed: $processed followers\", last_id = $lastid WHERE id = $jobid", $dblink);    
     next:
 }
 echo ("Done Running Jobs") . '\n';

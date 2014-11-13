@@ -7,7 +7,7 @@ if(!isset($_GET['job_id'])){
 }
 
 
-include dirname(__FILE__) . './twitteroauth/config.php';
+include dirname(__FILE__) . '/twitteroauth/config.php';
 
 $dblink = mysql_connect(DB_HOST, DB_USER, DB_PASS);
 mysql_select_db(DB_NAME, $dblink);

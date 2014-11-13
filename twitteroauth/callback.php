@@ -130,6 +130,9 @@ if (200 == $connection->http_code) {
 		  		if(!isset($_SESSION['owner_id'])){
 		  			die('Session Issue');
 		  		}
+
+		  		/* Todo: check if owner already has job running and if so redirect to it */
+
 		  		$jobid = uniqid($_SESSION['owner_id']);
 		  		$sqlValues = array(
 		  			$_SESSION['owner_id'],

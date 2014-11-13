@@ -26,5 +26,9 @@ switch ($connection->http_code) {
     break;
   default:
     /* Show notification if something went wrong. */
-    echo 'Could not connect to Twitter. Refresh the page or try again later.';
+    if ($connection->http_code == 401) {
+    	echo 'Invalid or expired token';
+    }else{
+    	echo 'Could not connect to Twitter. Refresh the page or try again later.';
+    }
 }

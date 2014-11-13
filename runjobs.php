@@ -13,17 +13,20 @@ $jobSql = "SELECT jobs.id as jobid, last_id, owner_id as listOwnerToBeFollowedOw
 $jobRes = mysql_query($jobSql, $dblink);
 
 if($jobRes === FALSE){
-    print 'jobRes query failed';
+    echo 'jobRes query failed';
+    exit;
 }
 
 /* Iterate through "to follows" from database */
-print("Beginning Job Processing " . mysql_num_rows($jobRes));
+echo ("Beginning Job Processing " . mysql_num_rows($jobRes));
 while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
     $jobid = $jobInfo->jobid;
     $jobStatus = "RUNNING";
     if ( mysql_query("UPDATE jobs SET status = \"$jobStatus\" WHERE id = $jobid", $dblink) === FALSE ){
-        print 'Could not update job ' . $jobid . ' to running status';
+        echo 'Could not update job ' . $jobid . ' to running status';
+        continue;
     }
+
     $lastid = 0;
     if(!is_null($jobInfo->last_id)){
         $lastid = intval($jobInfo);
@@ -32,7 +35,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
     $followListSQL = "SELECT id,to_follow FROM lists WHERE owner_id = " . $jobInfo->listOwnerToBeFollowedOwner . " AND id >= $lastid ORDER BY id";
     $followRes = mysql_query($followListSQL, $dblink);
     if($followRes === FALSE){
-        print 'Failed to select list owner';
+        echo 'Failed to select list owner';
         continue;
     }
 
@@ -41,7 +44,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
 
         $twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $jobInfo->oauth_token, $jobInfo->oauth_secret);
         if (!is_object($twitter)) {
-            print('Error creating TwitterOAuth object');
+            echo('Error creating TwitterOAuth object');
             exit (-1);
         }       
         $twitter->host = 'https://api.twitter.com/1.1/';
@@ -55,7 +58,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
         if (!is_object($followed) || isset($followed->errors)) {
             $ref = uniqid();
             mysql_query("UPDATE jobs SET status = \"ERROR\", message = \"Problem while processing, Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
-            print($ref . ' ' . print_r($followed));
+            echo ($ref . ' ' . echo_r($followed));
             goto next;
         } else {
             if($processed % 10){
@@ -67,6 +70,6 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
     mysql_query("UPDATE jobs SET status = \"FINISHED\", message = \"Done processing. Processed: $processed followers\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);    
     next:
 }
-print("Done Running Jobs");
+echo ("Done Running Jobs");
 mysql_close($dblink);
 ?>

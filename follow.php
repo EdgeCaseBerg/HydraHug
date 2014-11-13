@@ -8,7 +8,7 @@ if(!isset($_GET['twitter_id']) || !is_numeric($_GET['twitter_id'])){
 }
 
 $_SESSION['state'] = 'follow';
-$_SESSION['owner_id'] = intval($_GET['twitter_id']);
+$_SESSION['owner_id'] = $_GET['twitter_id'];
 
 header('Location: ./twitteroauth/redirect.php');
-?>
+?>  

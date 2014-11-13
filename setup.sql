@@ -9,7 +9,7 @@ USE hydra;
 CREATE TABLE users (
     id INT(12) NOT NULL auto_increment PRIMARY KEY,
     twitter_name VARCHAR(256) NOT NULL,
-    twitter_id INT(12) NOT NULL,
+    twitter_id VARCHAR(128) NOT NULL,
     oauth_token VARCHAR(256) NOT NULL, 
     oauth_secret VARCHAR(256),
     INDEX(`twitter_id`),
@@ -18,14 +18,14 @@ CREATE TABLE users (
 
 CREATE TABLE lists (
 	id INT(12) NOT NULL auto_increment PRIMARY KEY,
-	owner_id INT(12) NOT NULL,
-	to_follow INT(12) NOT NULL
+	owner_id VARCHAR(128) NOT NULL,
+	to_follow VARCHAR(128) NOT NULL
 ) ENGINE InnoDB;
 
 CREATE TABLE jobs (
 	id int(12) NOT NULL auto_increment PRIMARY KEY,
-	owner_id INT(12) NOT NULL,
-	follower_id INT(12) NOT NULL,
+	owner_id VARCHAR(128) NOT NULL,
+	follower_id VARCHAR(128) NOT NULL,
 	job_id VARCHAR(512) NOT NULL,
 	message VARCHAR(512),
 	status VARCHAR(32) DEFAULT "CREATED",

@@ -24,6 +24,7 @@ CREATE TABLE lists (
 
 CREATE TABLE jobs (
 	id int(12) NOT NULL auto_increment PRIMARY KEY,
+	last_id INT(12),
 	owner_id VARCHAR(128) NOT NULL,
 	follower_id VARCHAR(128) NOT NULL,
 	job_id VARCHAR(512) NOT NULL,

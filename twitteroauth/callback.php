@@ -144,6 +144,7 @@ if (200 == $connection->http_code) {
 		  		$sql = "INSERT INTO jobs (owner_id, follower_id, job_id, message, status) VALUES (" .implode(',',$sqlValues). ")";
 		  		mysql_query($sql);
 		  		mysql_close($dblink);
+		  		unset($_SESSION['state']);
 		  		header('Location: /jobs?job_id=' . $jobid);
 		  		break;
 		  	default:

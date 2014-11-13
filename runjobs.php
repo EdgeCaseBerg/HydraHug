@@ -72,7 +72,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
             }
         }
         $processed++;
-        $lastid = $followRow->last_id;
+        $lastid = $followRow->id;
     }
     mysql_query("UPDATE jobs SET status = \"FINISHED\", message = \"Done processing. Processed: $processed followers\", last_id = $lastid WHERE id = $jobid", $dblink);    
     next:

@@ -32,7 +32,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
         $lastid = intval($jobInfo);
     }
 
-    $followListSQL = "SELECT id,to_follow FROM lists WHERE owner_id = " . $jobInfo->listOwnerToBeFollowedOwner . " AND id >= $lastid ORDER BY id";
+    $followListSQL = "SELECT id,to_follow FROM lists WHERE owner_id = " . $jobInfo->listOwnerToBeFollowedOwner . " AND id >= $lastid ORDER BY id ASC";
     $followRes = mysql_query($followListSQL, $dblink);
     if($followRes === FALSE){
         echo 'Failed to select list owner' . '\n';
@@ -58,7 +58,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
         if (!is_object($followed) || isset($followed->errors)) {
             $ref = uniqid();
             mysql_query("UPDATE jobs SET status = \"ERROR\", message = \"Problem while processing, Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
-            echo ($ref . ' ' . echo_r($followed)) . '\n';
+            echo $ref . ' ' . print_r($followed,1) . '\n';
             goto next;
         } else {
             if($processed % 10){

@@ -56,10 +56,15 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
 
         $followed = $twitter->post('friendships/create', $params);
         if (!is_object($followed) || isset($followed->errors)) {
-            $ref = uniqid();
-            mysql_query("UPDATE jobs SET status = \"ERROR\", message = \"Problem while processing, Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
-            echo $ref . ' ' . print_r($followed,1) . '\n';
-            goto next;
+
+            if($followed->errors[0]->code == 160){
+                /* Already followed... */
+            }else{
+                $ref = uniqid();
+                mysql_query("UPDATE jobs SET status = \"ERROR\", message = \"Problem while processing, Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
+                echo $ref . ' ' . print_r($followed,1) . '\n';
+                goto next;
+            }
         } else {
             if($processed % 10){
                 mysql_query("UPDATE jobs SET status = \"RUNNING\", message = \"Last processed id: {$followRow->to_follow}\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);    

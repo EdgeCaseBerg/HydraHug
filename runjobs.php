@@ -29,7 +29,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
 
     $lastid = 0;
     if(!is_null($jobInfo->last_id)){
-        $lastid = intval($jobInfo);
+        $lastid = intval($jobInfo->last_id);
     }
 
     $followListSQL = "SELECT id,to_follow FROM lists WHERE owner_id = " . $jobInfo->listOwnerToBeFollowedOwner . " AND id >= $lastid ORDER BY id ASC";

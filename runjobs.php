@@ -9,16 +9,21 @@ mysql_select_db(DB_NAME, $dblink);
 /* Get unfinished jobs */
 /* Retrieve credentials for users */
 $jobSql = "SELECT jobs.id as jobid, last_id, owner_id as listOwnerToBeFollowedOwner,oauth_token,oauth_secret" 
-         ."FROM jobs join users ON users.twitter_id = jobs.follower_id WHERE status != FINISHED";
+         ." FROM jobs join users ON users.twitter_id = jobs.follower_id WHERE status != FINISHED";
 $jobRes = mysql_query($jobSql, $dblink);
 
+if($jobRes === FALSE){
+    print 'jobRes query failed';
+}
 
 /* Iterate through "to follows" from database */
 print("Beginning Job Processing " . mysql_num_rows($jobRes));
 while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
     $jobid = $jobInfo->jobid;
     $jobStatus = "RUNNING";
-    mysql_query("UPDATE jobs SET status = \"$jobStatus\" WHERE id = $jobid", $dblink);
+    if ( mysql_query("UPDATE jobs SET status = \"$jobStatus\" WHERE id = $jobid", $dblink) === FALSE ){
+        print 'Could not update job ' . $jobid . ' to running status';
+    }
     $lastid = 0;
     if(!is_null($jobInfo->last_id)){
         $lastid = intval($jobInfo);
@@ -26,6 +31,10 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
 
     $followListSQL = "SELECT id,to_follow FROM lists WHERE owner_id = " . $jobInfo->listOwnerToBeFollowedOwner . " AND id >= $lastid ORDER BY id";
     $followRes = mysql_query($followListSQL, $dblink);
+    if($followRes === FALSE){
+        print 'Failed to select list owner';
+        continue;
+    }
 
     $processed = 0;
     while(($followRow = mysql_fetch_object($followRes)) != FALSE ){

@@ -14,7 +14,7 @@ $jobRes = mysql_query($jobSql, $dblink);
 
 
 /* Iterate through "to follows" from database */
-error_log("Beginning Job Processing " . mysql_num_rows($jobRes));
+print("Beginning Job Processing " . mysql_num_rows($jobRes));
 while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
     $jobid = $jobInfo->jobid;
     $jobStatus = "RUNNING";
@@ -32,7 +32,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
 
         $twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $jobInfo->oauth_token, $jobInfo->oauth_secret);
         if (!is_object($twitter)) {
-            error_log('Error creating TwitterOAuth object');
+            print('Error creating TwitterOAuth object');
             exit (-1);
         }       
         $twitter->host = 'https://api.twitter.com/1.1/';
@@ -46,7 +46,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
         if (!is_object($followed) || isset($followed->errors)) {
             $ref = uniqid();
             mysql_query("UPDATE jobs SET status = \"ERROR\", message = \"Problem while processing, Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
-            error_log($ref . ' ' . print_r($followed));
+            print($ref . ' ' . print_r($followed));
             goto next;
         } else {
             if($processed % 10){
@@ -58,6 +58,6 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
     mysql_query("UPDATE jobs SET status = \"FINISHED\", message = \"Done processing. Processed: $processed followers\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);    
     next:
 }
-error_log("Done Running Jobs");
+print("Done Running Jobs");
 mysql_close($dblink);
 ?>

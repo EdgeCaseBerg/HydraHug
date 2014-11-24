@@ -58,9 +58,16 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
         $followed = $twitter->post('friendships/create', $params);
         if (!is_object($followed) || isset($followed->errors)) {
 
-            if($followed->errors[0]->code == 160){
+            if ($followed->errors[0]->code == 160) {
                 /* Already followed... */
-            }else{
+            } elseif ($followed->errors[0]->code == 161 ) {
+                $ref = uniqid();
+                mysql_query("UPDATE jobs SET status = \"NO_MORE_FOLLOW\", message = \"You've hit the twittgit aer follow limit! See: http://support.twitter.com/articles/66885-i-can-t-follow-people-follow-limits Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
+                echo $ref . ' ' . print_r($followed,1) . '\n';
+                goto next;
+            } elseif ($followed->errors[0]->code == 162) {
+                //user has been blocked from following, so just let it go.
+            } else {
                 $ref = uniqid();
                 mysql_query("UPDATE jobs SET status = \"ERROR\", message = \"Problem while processing, Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
                 echo $ref . ' ' . print_r($followed,1) . '\n';

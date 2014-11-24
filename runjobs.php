@@ -62,7 +62,7 @@ while (($jobInfo = mysql_fetch_object($jobRes)) != FALSE) {
                 /* Already followed... */
             } elseif ($followed->errors[0]->code == 161 ) {
                 $ref = uniqid();
-                mysql_query("UPDATE jobs SET status = \"NO_MORE_FOLLOW\", message = \"You've hit the twittgit aer follow limit! See: http://support.twitter.com/articles/66885-i-can-t-follow-people-follow-limits Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
+                mysql_query("UPDATE jobs SET status = \"NO_MORE_FOLLOW\", message = \"You've hit the twitter daily follow limit! See: http://support.twitter.com/articles/66885-i-can-t-follow-people-follow-limits Ref: $ref\", last_id = {$followRow->id} WHERE id = $jobid", $dblink);
                 echo $ref . ' ' . print_r($followed,1) . '\n';
                 goto next;
             } elseif ($followed->errors[0]->code == 162) {

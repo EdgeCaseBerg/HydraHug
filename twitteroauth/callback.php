@@ -145,7 +145,7 @@ if (200 == $connection->http_code) {
 		  		mysql_query($sql);
 		  		mysql_close($dblink);
 		  		unset($_SESSION['state']);
-		  		header('Location: /jobs?job_id=' . $jobid);
+		  		header('Location: /jobs.php?job_id=' . $jobid);
 		  		break;
 		  	default:
 		  		mysql_close($dblink);
